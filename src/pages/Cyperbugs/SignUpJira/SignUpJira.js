@@ -42,6 +42,10 @@ function SignUpJira() {
         });
         history.push("/userManagement");
       } else {
+        dispatch({
+          type: SIGN_UP_USER_SAGA,
+          infoUser: value,
+        });
         history.push("/");
       }
     },
@@ -140,10 +144,10 @@ function SignUpJira() {
             className="mt-3 text-white"
             style={{ background: "#7286D3" }}
             onClick={() => {
-              dispatch({
-                type: "CREAT_NEW_USER_MANAGEMENT",
-                register: false,
-              });
+              // dispatch({
+              //   type: "CREAT_NEW_USER_MANAGEMENT",
+              //   register: false,
+              // });
             }}
           >
             Register

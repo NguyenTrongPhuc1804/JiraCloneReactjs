@@ -59,8 +59,8 @@ export default function MenuJira() {
                   </NavLink>
                 </div>
               </Col> */}
-              <Col xl={24} lg={8}>
-                <div className="">
+              <Col style={{ width: "100%" }} xl={24} lg={8}>
+                <div className="w-100">
                   <i
                     style={{ fontSize: "20px" }}
                     className="fa-solid fa-people-roof mr-2"
@@ -74,8 +74,8 @@ export default function MenuJira() {
                   </NavLink>
                 </div>
               </Col>
-              <Col xl={24} lg={8}>
-                <div className="">
+              <Col style={{ width: "100%" }} xl={24} lg={8}>
+                <div className="w-100">
                   <i style={{ fontSize: "20px" }} className="fa fa-cog mr-2" />
                   <NavLink
                     className="text-dark"
@@ -86,7 +86,7 @@ export default function MenuJira() {
                   </NavLink>
                 </div>
               </Col>
-              <Col xl={24} lg={8}>
+              <Col style={{ width: "100%" }} xl={24} lg={8}>
                 <div className="">
                   <i
                     style={{ fontSize: "20px" }}

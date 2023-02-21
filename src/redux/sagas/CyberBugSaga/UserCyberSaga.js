@@ -175,6 +175,7 @@ export function* watchDeleteUser() {
 }
 // edit user
 function* editUser(action) {
+  console.log("Asdw", action);
   try {
     const { data, status } = yield call(() =>
       UserJiraService.editUser(action.infoUserEdit)

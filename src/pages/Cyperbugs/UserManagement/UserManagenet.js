@@ -87,12 +87,13 @@ function UserManagenet() {
     <div className="container text-center mt-5">
       <div className="row">
         <div className="col-6">
+          <p>Search user from email</p>
           <Space direction="vertical">
             <Search
               enterButton
-              style={{
-                width: 300,
-              }}
+              //   style={{
+              //     width: 300,
+              //   }}
               // onChang={onChange}
               // onSelect={onSelect}
               onSearch={(value) => {
@@ -106,6 +107,7 @@ function UserManagenet() {
           </Space>
         </div>
         <div className="col-6 ">
+          <p>Create new account</p>
           <Button
             onClick={() => {
               dispatch({
