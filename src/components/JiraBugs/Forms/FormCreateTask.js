@@ -15,6 +15,7 @@ import {
   GET_STATUS_SAGA,
 } from "../../../redux/constants/CyberBug/StatusTaskContants";
 import { GET_USER_ASSIGN_TASK_SAGA } from "../../../redux/constants/CyberBug/UserJira";
+import { openCustomNotificationWithIcon } from "../../../util/Notification/notificationJira";
 
 export default function FormCreateTask() {
   const [timeTracking, setTimeTracking] = useState({
@@ -36,8 +37,10 @@ export default function FormCreateTask() {
   const { listUS } = useSelector((state) => state.UserLoginReducer);
   const { status } = useSelector((state) => state.StatusTaskReducer);
   const { arrUserAssign } = useSelector((state) => state.UserLoginReducer);
+  const { projectDetail } = useSelector((state) => state.EditProjectReducer);
+  console.log("pro", arrUserAssign.length);
   //hook
-  console.log("tasjk", arrProject);
+  // console.log("tasjk", arrProject);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch({
@@ -82,14 +85,20 @@ export default function FormCreateTask() {
       priorityId: priority[0]?.priorityId,
     },
     onSubmit: (value) => {
-      console.log(value);
-      dispatch({
-        type: CREAT_NEW_TASK_SAGA,
-        newTask: value,
-      });
+      arrUserAssign.length === 0
+        ? openCustomNotificationWithIcon(
+            "error",
+            "Vui lòng thêm 1 user vào dự án để tạo task",
+            "",
+            "topRight"
+          )
+        : dispatch({
+            type: CREAT_NEW_TASK_SAGA,
+            newTask: value,
+          });
     },
   });
-  console.log("arr", arrProject[arrProject.length - 1]?.id);
+  // console.log("arr", arrProject[arrProject.length - 1]?.id);
   return (
     <form className="container" onSubmit={formik.handleSubmit}>
       <div className="form-group">
@@ -123,7 +132,7 @@ export default function FormCreateTask() {
       </div>
       <div className="form-group">
         <div className="row">
-          <div className="col-6">
+          <div className="col-md-12 col-lg-6">
             <p>Task name</p>
             <input
               type="text"
@@ -132,7 +141,7 @@ export default function FormCreateTask() {
               onChange={formik.handleChange}
             />
           </div>
-          <div className="col-6">
+          <div className="col-md-12 col-lg-6">
             <p>Status</p>
             <select
               className="form-control"
@@ -152,7 +161,7 @@ export default function FormCreateTask() {
 
       <div className="form-group">
         <div className="row">
-          <div className="col-6">
+          <div className="col-md-12 col-lg-6">
             <p>Priority</p>
             <select
               defaultValue={"1"}
@@ -172,7 +181,7 @@ export default function FormCreateTask() {
               <option selected value="2"></option> */}
             </select>
           </div>
-          <div className="col-6">
+          <div className="col-md-12 col-lg-6">
             <p>Type Task</p>
 
             <select
@@ -195,7 +204,7 @@ export default function FormCreateTask() {
       </div>
       <div className="form-group">
         <div className="row">
-          <div className="col-6">
+          <div className="col-md-12 col-lg-6">
             <p> Assigness</p>
             <Select
               optionFilterProp="label"
@@ -224,7 +233,7 @@ export default function FormCreateTask() {
               />
             </div>
           </div>
-          <div className="col-6">
+          <div className="col-md-12 col-lg-6">
             <p>Time tracking</p>
             <Slider
               value={timeTracking.timeTrackingSpent}

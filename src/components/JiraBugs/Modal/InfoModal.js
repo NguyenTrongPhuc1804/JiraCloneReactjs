@@ -5,11 +5,15 @@ import { GET_PRIORIRY_SAGA } from "../../../redux/constants/CyberBug/PriorityCon
 import { GET_STATUS_SAGA } from "../../../redux/constants/CyberBug/StatusTaskContants";
 import { number } from "yup";
 import {
+  ADD_COMMENT_TASK_SAGA,
+  DELETE_COMMENT_SAGA,
+  DELETE_TASK_SAGA,
   EDIT_TASK_API,
   GET_TASK_DETAIL_SAGA,
   GET_TASK_TYPE_SAGA,
   REMOVE_ASSIGNESS,
   UPDATE_ASSIGNESS,
+  UPDATE_COMMENT_SAGA,
   UPDATE_STATUS_SAGA,
   UPDATE_TASK,
 } from "../../../redux/constants/CyberBug/JiraBugTaskContants";
@@ -17,18 +21,25 @@ import { Editor } from "@tinymce/tinymce-react";
 import { Button, Select } from "antd";
 import { faL } from "@fortawesome/free-solid-svg-icons";
 import { logDOM } from "@testing-library/react";
+import { USER_LOGIN } from "../../../util/constants/settingSytem";
+import { calcLength } from "framer-motion";
 
 export default function InfoModal() {
+  const { avatar } = JSON.parse(localStorage.getItem(USER_LOGIN));
+
   const dispatch = useDispatch();
   const { taskDetailModal } = useSelector((state) => state.TaskReducer);
   const { status } = useSelector((state) => state.StatusTaskReducer);
   const { priority } = useSelector((state) => state.PriorityReducer);
   const { taskType } = useSelector((state) => state.JiraTaskReducer);
   const { projectDetail } = useSelector((state) => state.EditProjectReducer);
-  // console.log("Asd", projectDetail);
-  // hook]
+
+  // hook
   const [estimate, setEstimate] = useState(taskDetailModal.originalEstimate);
   const [visible, setVisible] = useState(false);
+  const [contentComment, setCommentContent] = useState("");
+  const [updateComment, setUpdateComment] = useState(false);
+  const [idComment, setIdComment] = useState(0);
   const [historyContent, setHistoryContent] = useState(
     taskDetailModal.description
   );
@@ -45,8 +56,9 @@ export default function InfoModal() {
       type: GET_TASK_TYPE_SAGA,
     });
   }, []);
+
   // console.log("asasd", taskType);
-  // console.log("taskDetailModal", taskDetailModals);
+  // console.log("taskDetailModal", taskDetailModal);
   // console.log("project", projectDetail);
   // handle event time tracking
   const renderTimeTracking = () => {
@@ -104,7 +116,65 @@ export default function InfoModal() {
       </div>
     );
   };
+  const renderAllComment = () =>
+    taskDetailModal.lstComment.map((comment, index) => (
+      <div key={index} className="display-comment" style={{ display: "flex" }}>
+        <div className="avatar">
+          <img src={comment.avatar} alt="!23" />
+        </div>
+        <div className="d-flex justify-content-between w-100 align-items-center ">
+          <div>
+            <p style={{ marginBottom: 5 }}>
+              <strong>{comment.name}</strong> <span>a month ago</span>
+            </p>
+            <p style={{ marginBottom: 5 }}>
+              {HtmlParser(comment.commentContent)}
+            </p>
+          </div>
+          <div>
+            <Button
+              onClick={() => {
+                setCommentContent(comment.commentContent);
+                setUpdateComment(!updateComment);
+                setIdComment(comment.id);
+              }}
+              className="mr-3"
+              type="primary"
+              shape="round"
+            >
+              Edit
+            </Button>
 
+            <Button
+              onClick={() => {
+                console.log("!23");
+                dispatch({
+                  type: DELETE_COMMENT_SAGA,
+                  taskId: taskDetailModal.taskId,
+                  idComment: comment.id,
+                });
+                // dispatch({
+                //   type: DELETE_COMMENT_SAGA,
+                //   taskId: taskDetailModal.taskId,
+                //   idComment: comment.idComment,
+                // });
+              }}
+              shape="round"
+            >
+              Delete
+            </Button>
+          </div>
+        </div>
+      </div>
+    ));
+
+  const handleDeleteTask = () => {
+    dispatch({
+      type: DELETE_TASK_SAGA,
+      projectId: projectDetail.id,
+      taskId: taskDetailModal.taskId,
+    });
+  };
   // event update
   const handleChangeUpdateTask = (e) => {
     const { name, value } = e.target;
@@ -137,6 +207,17 @@ export default function InfoModal() {
       label: mem.name,
     }));
   // console.log("123", optionUs);
+  const editComment = () => {
+    dispatch({
+      type: UPDATE_COMMENT_SAGA,
+      taskId: taskDetailModal.taskId,
+      commentUpdate: {
+        id: idComment,
+        contentComment: contentComment,
+      },
+    });
+    setUpdateComment(!updateComment);
+  };
   return (
     <div
       className="modal fade"
@@ -174,7 +255,19 @@ export default function InfoModal() {
                 <i className="fa fa-link" />
                 <span style={{ paddingRight: 20 }}>Copy link</span>
               </div>
-              <i className="fa fa-trash-alt" style={{ cursor: "pointer" }} />
+              <button
+                onClick={handleDeleteTask}
+                className=" close "
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <i
+                  className="fa fa-trash-alt "
+
+                  // style={{ cursor: "pointer" }}
+                />
+              </button>
+
               <button
                 type="button"
                 className="close"
@@ -308,18 +401,61 @@ export default function InfoModal() {
                     <h6>Comment</h6>
                     <div className="block-comment" style={{ display: "flex" }}>
                       <div className="avatar">
-                        <img
-                          src={require("../../../assets/img/download (1).jfif")}
-                          alt="!23"
-                        />
+                        <img src={avatar} alt="!23" />
                       </div>
                       <div className="input-comment">
-                        <input
-                          onChange={() => {}}
+                        {/* <input
+                          value={contentComment}
+                          name="contentComment"
+                          onChange={(e) => {
+                            // console.log("value", e.target.value);
+                            setCommentContent(e.target.value);
+                          }}
                           type="text"
                           placeholder="Add a comment ..."
+                        /> */}
+                        <Editor
+                          // initialValue={contentComment}
+                          value={contentComment}
+                          name="commentContent"
+                          id="commentContent"
+                          onEditorChange={(content, edit) => {
+                            setCommentContent(content);
+                          }}
+                          apiKey="your-api-key"
+                          init={{
+                            height: 200,
+                            menubar: false,
+                            plugins: [
+                              "advlist",
+                              "autolink",
+                              "lists",
+                              "link",
+                              "image",
+                              "charmap",
+                              "preview",
+                              "anchor",
+                              "searchreplace",
+                              "visualblocks",
+                              "code",
+                              "fullscreen",
+                              "insertdatetime",
+                              "media",
+                              "table",
+                              "code",
+                              "help",
+                              "wordcount",
+                            ],
+                            toolbar:
+                              "undo redo | blocks | " +
+                              "bold italic forecolor | alignleft aligncenter " +
+                              "alignright alignjustify | bullist numlist outdent indent | " +
+                              "removeformat | help",
+                            content_style:
+                              "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                          }}
                         />
-                        <p>
+                        {/* <p>
                           <span style={{ fontWeight: 500, color: "gray" }}>
                             Protip:
                           </span>
@@ -336,37 +472,49 @@ export default function InfoModal() {
                             </span>
                             to comment
                           </span>
-                        </p>
+                        </p> */}
+                        {contentComment.trim() !== "" ? (
+                          <div className="mt-3">
+                            <button
+                              onClick={() => {
+                                updateComment
+                                  ? editComment()
+                                  : dispatch({
+                                      type: ADD_COMMENT_TASK_SAGA,
+                                      dataComment: {
+                                        taskId: taskDetailModal.taskId,
+                                        contentComment: contentComment,
+                                      },
+                                    });
+                                setCommentContent("");
+                              }}
+                              className="btn btn-primary mr-3"
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={() => {
+                                setCommentContent("");
+                              }}
+                              className="btn "
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </div>
+                    <strong>All Comment</strong>
+
                     <div className="lastest-comment">
-                      <div className="comment-item">
-                        <div
-                          className="display-comment"
-                          style={{ display: "flex" }}
-                        >
-                          <div className="avatar">
-                            <img
-                              src={require("../../../assets/img/download (1).jfif")}
-                              alt="!23"
-                            />
-                          </div>
-                          <div>
-                            <p style={{ marginBottom: 5 }}>
-                              Lord Gaben <span>a month ago</span>
-                            </p>
-                            <p style={{ marginBottom: 5 }}>
-                              Lorem ipsum dolor sit amet, consectetur
-                              adipisicing elit. Repellendus tempora ex
-                              voluptatum saepe ab officiis alias totam ad
-                              accusamus molestiae?
-                            </p>
-                            <div>
-                              <span style={{ color: "#929398" }}>Edit</span>•
-                              <span style={{ color: "#929398" }}>Delete</span>
-                            </div>
-                          </div>
-                        </div>
+                      <div
+                        className="comment-item"
+                        id="customScroll"
+                        style={{ height: 250 }}
+                      >
+                        {renderAllComment()}
                       </div>
                     </div>
                   </div>

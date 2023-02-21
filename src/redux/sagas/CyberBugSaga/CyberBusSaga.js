@@ -12,6 +12,7 @@ import {
 } from "../../constants/CyberBug/CyberBugContants";
 import { DISPLAY_LOADING, HIDE_LOADING } from "../../constants/LoadingConts";
 import { openCustomNotificationWithIcon } from "../../../util/Notification/notificationJira";
+import { GET_USER_SAGA_SEARCH } from "../../constants/CyberBug/UserJira";
 // signin saga
 function* signin(action) {
   yield put({
@@ -74,7 +75,10 @@ function* signUp(action) {
         "",
         "topRight"
       );
-      history.push("/");
+      yield put({
+        type: GET_USER_SAGA_SEARCH,
+        userList: "gmail",
+      });
     }
   } catch (err) {
     console.log(err.response.data);

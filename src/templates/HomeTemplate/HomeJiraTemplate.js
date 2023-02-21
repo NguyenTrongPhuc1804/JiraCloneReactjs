@@ -10,6 +10,8 @@ import SearchModal from "../../components/JiraBugs/Modal/SearchModal";
 import SideBarJiara from "../../components/JiraBugs/SideBarJira";
 import SideBar from "../../components/JiraBugs/SideBarJira";
 import "../../index.css";
+import AOS from "aos";
+import "aos/dist/aos.css";
 function HomeJiraTemplate(props) {
   let { Component, ...resRoute } = props;
   return (
@@ -20,10 +22,17 @@ function HomeJiraTemplate(props) {
           <>
             <div className="jira">
               <SideBarJiara />
-              <MenuJira />
-              <div className="main">
-                <Component {...propsRoute} />
-              </div>
+              <Row>
+                <Col xl={5} lg={24} sm={24}>
+                  <MenuJira />
+                </Col>
+
+                <Col xl={19} lg={24} sm={24}>
+                  <div className="main">
+                    <Component {...propsRoute} />
+                  </div>
+                </Col>
+              </Row>
             </div>
             {/* modal search */}
             <SearchModal />

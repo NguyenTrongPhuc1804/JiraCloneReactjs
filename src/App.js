@@ -26,6 +26,8 @@ import ManagerProject from "./pages/Cyperbugs/ManagerProject/ManagerProject";
 import ModalJira from "./HOC/ModalComponent/JiraModal/ModalJira";
 import IndexJira from "./pages/Cyperbugs/HomeJira/indexJira";
 import SignUpJira from "./pages/Cyperbugs/SignUpJira/SignUpJira";
+import DemoDragDrop from "./pages/Cyperbugs/demoDragDrop/DemoDragDrop";
+import UserManagenet from "./pages/Cyperbugs/UserManagement/UserManagenet";
 
 function App() {
   return (
@@ -63,6 +65,13 @@ function App() {
           Component={ManagerProject}
         />
         <LoginTemplate exact path="/signUp" Component={SignUpJira} />
+        <Hometemplate exact path="/demoDrag" Component={DemoDragDrop} />
+        <HomeJiraTemplate
+          exact
+          path="/userManagement"
+          Component={UserManagenet}
+        />
+
         {/* <HomeJiraTemplate exact path="/" Component={ManagerProject} /> */}
 
         {/* <Hometemplate exact path="*" Component={Home} /> */}

@@ -10,4 +10,14 @@ export const JiraTaskService = {
     baseServices.put(`Project/updateStatus`, statusId),
   editTaskDetail: (taskUpdateApi) =>
     baseServices.post(`Project/updateTask`, taskUpdateApi),
+  deleteTask: (taskId) =>
+    baseServices.delete(`Project/removeTask?taskId=${taskId}`),
+  addComment: (dataComment) =>
+    baseServices.post("Comment/insertComment", dataComment),
+  deleteComment: (idComment) =>
+    baseServices.delete(`Comment/deleteComment?idComment=${idComment}`),
+  updateComment: (id, commentContent) =>
+    baseServices.put(
+      `Comment/updateComment?id=${id}&contentComment=${commentContent}`
+    ),
 };

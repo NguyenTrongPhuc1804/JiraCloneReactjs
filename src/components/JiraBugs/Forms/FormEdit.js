@@ -55,7 +55,7 @@ export default function FormEdit() {
     <div>
       <form onSubmit={formik.handleSubmit} className="container-fluid">
         <div className="row">
-          <div className="col-4">
+          <div className="col-md-12 col-lg-4">
             <div className="form-group">
               <p>id</p>
               <input
@@ -69,7 +69,7 @@ export default function FormEdit() {
             </div>
           </div>
 
-          <div className="col-4">
+          <div className="col-md-12 col-lg-4">
             <div className="form-group">
               <p>Project Name</p>
               <input
@@ -82,7 +82,7 @@ export default function FormEdit() {
               />
             </div>
           </div>
-          <div className="col-4">
+          <div className="col-md-12 col-lg-4">
             <p>Category</p>
             <div className="form-group">
               <select

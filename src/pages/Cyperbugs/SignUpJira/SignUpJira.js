@@ -5,6 +5,13 @@ import { useDispatch } from "react-redux";
 import React from "react";
 
 import { SIGN_UP_USER_SAGA } from "../../../redux/constants/CyberBug/CyberBugContants";
+import { history } from "../../../util/history";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import {
+  EDIT_USER_INFO,
+  EDIT_USER_INFO_SAGA,
+} from "../../../redux/constants/CyberBug/UserJira";
 function SignUpJira() {
   const dispatch = useDispatch();
   const formik = useFormik({
@@ -28,15 +35,39 @@ function SignUpJira() {
       phoneNumber: Yup.number().required("Require"),
     }),
     onSubmit: (value) => {
-      dispatch({
-        type: SIGN_UP_USER_SAGA,
-        infoUser: value,
-      });
+      if (register) {
+        dispatch({
+          type: SIGN_UP_USER_SAGA,
+          infoUser: value,
+        });
+        history.push("/userManagement");
+      } else {
+        history.push("/");
+      }
     },
   });
+
+  useEffect(() => {
+    if (register) {
+      dispatch({
+        type: "CREAT_NEW_USER_MANAGEMENT",
+        handleSubmit: formik.handleSubmit,
+      });
+    }
+  }, []);
+  const { register } = useSelector((state) => state.ModalJiraReducer);
+  // const { editUser } = useSelector((state) => state.ModalJiraReducer);
+  // const { userId } = useSelector((state) => state.ModalJiraReducer);
+
+  // console.log("resg", userId);
+  // console.log("edit", editUser);
   return (
     <form onSubmit={formik.handleSubmit}>
-      <h1 className="mb-3">Sign Up Jira </h1>
+      {register ? (
+        <h1 className="mb-3">Create user </h1>
+      ) : (
+        <h1 className="mb-3">Sign up account </h1>
+      )}
       <div className="form-group">
         <p>Email</p>
         <input
@@ -99,17 +130,45 @@ function SignUpJira() {
           )}
         </p>
       </div>
-      <Button
-        htmlType="submit"
-        size="large"
-        className="mt-3 text-white"
-        style={{ background: "#7286D3" }}
-        onClick={formik.handleSubmit}
-      >
-        Register
-      </Button>
+      {register ? (
+        ""
+      ) : (
+        <div className="d-flex justify-content-between">
+          <Button
+            htmlType="submit"
+            size="large"
+            className="mt-3 text-white"
+            style={{ background: "#7286D3" }}
+            onClick={() => {
+              dispatch({
+                type: "CREAT_NEW_USER_MANAGEMENT",
+                register: false,
+              });
+            }}
+          >
+            Register
+          </Button>
+          <Button
+            htmlType="button"
+            size="large"
+            className="mt-3 ml-5 text-white"
+            style={{ background: "#7286D3" }}
+            onClick={() => {
+              history.goBack();
+            }}
+          >
+            Go back
+          </Button>
+        </div>
+      )}
     </form>
   );
 }
 
 export default SignUpJira;
+{
+  /* dispatch({
+          type: "CREAT_NEW_USER_MANAGEMENT",
+          handleSubmit: formik.handleSubmit,
+        }) */
+}

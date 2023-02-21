@@ -7,6 +7,7 @@ import HtmlParser from "react-html-parser";
 function IndexJira(props) {
   const dispatch = useDispatch();
   const { projectDetail } = useSelector((state) => state.EditProjectReducer);
+  // console.log("pjdt", projectDetail);
   useEffect(() => {
     const { projectId } = props.match.params;
     dispatch({

@@ -28,6 +28,7 @@ export default function ManagerProject() {
     (state) => state.ProjectJiraBugReducer.listProject
   );
   const { listUS } = useSelector((state) => state.UserLoginReducer);
+  console.log("lítUS", listUS);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch({
@@ -259,7 +260,8 @@ export default function ManagerProject() {
   ];
   return (
     <div className="mt-5 container " style={{ width: "100vw" }}>
-      <Space
+      <h2>List Project</h2>
+      {/* <Space
         style={{
           marginBottom: 16,
         }}
@@ -267,13 +269,15 @@ export default function ManagerProject() {
         <Button onClick={setAgeSort}>Sort age</Button>
         <Button onClick={clearFilters}>Clear filters</Button>
         <Button onClick={clearAll}>Clear filters and sorters</Button>
-      </Space>
+      </Space> */}
       <Table
+        className="tableAntd"
+        style={{ width: "1000px" }}
         columns={columns}
         rowKey="id"
         dataSource={listProduct}
         onChange={handleChange}
-        scroll={{ x: 1000, y: 550 }}
+        scroll={{ x: 600, y: 550 }}
       />
     </div>
   );

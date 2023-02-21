@@ -7,6 +7,7 @@ import {
   CREATE_PROJECT_SAGA,
   GET_ALL_CATEGORY_SAGA,
 } from "../../../redux/constants/CyberBug/CyberBugContants";
+import Aos from "aos";
 export default function CreateProject() {
   const dispatch = useDispatch();
   const arrProjectCategory = useSelector(
@@ -38,10 +39,12 @@ export default function CreateProject() {
       });
     },
   });
-
+  useEffect(() => {
+    Aos.init();
+  }, []);
   // -----------
   return (
-    <div className="container">
+    <div data-aos="fade-up" data-aos-duration="1500" className="container">
       <h1 className="text-center">Create Project</h1>
       <form className="container" onSubmit={formik.handleSubmit}>
         <div className="form-group">

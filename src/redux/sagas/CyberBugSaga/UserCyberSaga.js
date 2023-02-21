@@ -11,8 +11,12 @@ import { history } from "../../../util/history";
 import { openCustomNotificationWithIcon } from "../../../util/Notification/notificationJira";
 import { GET_ALL_PROJECT_SAGA } from "../../constants/CyberBug/CyberBugContants";
 import {
+  DELETE_USER_JIRA,
+  EDIT_USER_INFO,
+  EDIT_USER_INFO_SAGA,
   GET_USER_ASSIGN_TASK,
   GET_USER_ASSIGN_TASK_SAGA,
+  GET_USER_SAGA_SEARCH,
 } from "../../constants/CyberBug/UserJira";
 import { DISPLAY_LOADING, HIDE_LOADING } from "../../constants/LoadingConts";
 // -----------getUser manager project--------------
@@ -32,7 +36,7 @@ function* getUser(action) {
   }
 }
 export function* watchGetUserSearch() {
-  yield takeLatest("GET_USER_SAGA_SEARCH", getUser);
+  yield takeLatest(GET_USER_SAGA_SEARCH, getUser);
 }
 // --------------assignUser manager project-----------
 
@@ -106,7 +110,7 @@ function* getProjectDetail(action) {
       });
     }
   } catch (err) {
-    console.log("err", err.response.data);
+    console.log("err", err);
     console.log("404 not found!");
     // history.push("/managerProject");
   }
@@ -141,4 +145,58 @@ function* getUSerAssignTask(action) {
 
 export function* watchGetUserAssignTask() {
   yield takeLatest(GET_USER_ASSIGN_TASK_SAGA, getUSerAssignTask);
+}
+// delete User
+function* deleteUser(action) {
+  try {
+    const { data, status } = yield call(() =>
+      UserJiraService.deleteUser(action.userId)
+    );
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put({
+        type: GET_USER_SAGA_SEARCH,
+        userList: "gmail",
+      });
+      openCustomNotificationWithIcon(
+        "success",
+        "Delete user success",
+        "",
+        "topRight"
+      );
+    }
+  } catch (err) {
+    console.log("err1", err);
+    console.log("err", err.response.data);
+  }
+}
+
+export function* watchDeleteUser() {
+  yield takeLatest(DELETE_USER_JIRA, deleteUser);
+}
+// edit user
+function* editUser(action) {
+  try {
+    const { data, status } = yield call(() =>
+      UserJiraService.editUser(action.infoUserEdit)
+    );
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put({
+        type: GET_USER_SAGA_SEARCH,
+        userList: "gmail",
+      });
+      openCustomNotificationWithIcon(
+        "success",
+        "Edit user success",
+        "",
+        "topRight"
+      );
+    }
+  } catch (err) {
+    console.log("err1", err);
+    console.log("err", err.response.data);
+  }
+}
+
+export function* watchEditUser() {
+  yield takeLatest(EDIT_USER_INFO_SAGA, editUser);
 }

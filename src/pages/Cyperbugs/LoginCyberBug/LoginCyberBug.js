@@ -42,6 +42,7 @@ function LoginCyberBug(props) {
     <form onSubmit={formik.handleSubmit} className="d-flex flex-column ">
       <h3 className="text-center mb-4">Login Jira Project</h3>
       <Input
+        // autoComplete="off"
         onChange={formik.handleChange}
         id="name"
         name="name"

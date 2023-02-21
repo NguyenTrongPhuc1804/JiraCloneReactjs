@@ -9,4 +9,6 @@ export const UserJiraService = {
     baseServices.get(`Project/getProjectDetail?id=${projectId}`),
   searchAssignUserTask: (idProject) =>
     baseServices.get(`Users/getUserByProjectId?idProject=${idProject}`),
+  deleteUser: (idUser) => baseServices.delete(`Users/deleteUser?id=${idUser}`),
+  editUser: (infoUser) => baseServices.put(`Users/editUser`, infoUser),
 };

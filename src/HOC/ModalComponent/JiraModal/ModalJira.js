@@ -1,4 +1,4 @@
-import { Button, Modal } from "antd";
+import { Button, Drawer, Modal } from "antd";
 import { useState } from "react";
 
 import React from "react";
@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 export default function ModalJira() {
   const { isModalOpen, ComponentContentModal, callbackSubmit, title } =
     useSelector((state) => state.ModalJiraReducer);
-
   const dispatch = useDispatch();
   const showModal = () => {
     dispatch({
@@ -25,15 +24,21 @@ export default function ModalJira() {
   };
   return (
     <>
-      <Modal
+      <Drawer
         centered
-        width={800}
+        // width={300}
         title={title}
+        onClose={handleCancel}
         open={isModalOpen}
         onOk={handleCancel}
         onCancel={handleCancel}
         footer={[
-          <Button key="submit" type="primary" onClick={callbackSubmit}>
+          <Button
+            className="mr-3"
+            key="submit"
+            type="primary"
+            onClick={callbackSubmit}
+          >
             Submit
           </Button>,
           <Button key="button" onClick={handleCancel}>
@@ -42,7 +47,7 @@ export default function ModalJira() {
         ]}
       >
         {ComponentContentModal}
-      </Modal>
+      </Drawer>
     </>
   );
 }

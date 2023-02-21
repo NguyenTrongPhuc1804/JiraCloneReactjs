@@ -16,17 +16,23 @@ import {
 } from "./CyberBugSaga/CreateProjectSaga";
 import {
   watchAssignUser,
+  watchDeleteUser,
+  watchEditUser,
   watchGetprojectDetail,
   watchGetUserAssignTask,
   watchGetUserSearch,
   watchRemoveUSerProject,
 } from "./CyberBugSaga/UserCyberSaga";
 import {
+  watchAddComment,
   watchCreateTask,
+  watchDeleteComment,
+  watchDeleteTask,
   watchEditTaskApi,
   watchGetAllProjectTask,
   watchGetTaskDetail,
   watchGetTaskType,
+  watchUpdateComment,
   watchUpdateStatusTask,
 } from "./CyberBugSaga/CreateTaskSaga";
 import { watchGetPriority } from "./CyberBugSaga/PrioritySaga";
@@ -68,5 +74,11 @@ export function* rootSaga() {
     watchSignUpSaga(),
     // eidt task api
     watchEditTaskApi(),
+    watchDeleteTask(),
+    watchAddComment(),
+    watchDeleteComment(),
+    watchUpdateComment(),
+    watchDeleteUser(),
+    watchEditUser(),
   ]);
 }
